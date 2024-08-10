@@ -15,13 +15,6 @@ export const MainPage = () => {
     return (
         <div className={cls.wrapper}>
             <MainPageProvider>
-                <div className={classNames(cls.info, {
-                    [cls.hide]: !calendar,
-                    [cls.tasks]: project === ProjectEnumValue.TASKS,
-                }, [])}>
-                    {project === ProjectEnumValue.REVIEW && <ProjectReview />}
-                    {project === ProjectEnumValue.TASKS && <ProjectCanban />}
-                </div>
                 <div className={classNames(cls.calendar, {
                     [cls.tasks]: project === ProjectEnumValue.TASKS,
                 }, [])}>

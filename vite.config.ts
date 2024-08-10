@@ -3,7 +3,11 @@ import react from '@vitejs/plugin-react';
 import svgx from '@svgx/vite-plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
-    plugins: [react(), svgx()],
+    plugins: [react(),
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+        svgx(),
+    ],
     resolve: {
         alias: {
             '@': '/src',
@@ -25,7 +29,6 @@ export default defineConfig({
 
             '@entities': '/src/entities',
 
-            '@store': '/src/shared/lib/store',
         },
     },
 });

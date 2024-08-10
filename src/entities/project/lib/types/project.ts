@@ -1,4 +1,5 @@
 import { DetailedHTMLProps, LiHTMLAttributes } from 'react';
+import { IBoard } from '@widgets/ui';
 
 export enum ProjectEnumValue {
     REVIEW = 'review',
@@ -34,8 +35,29 @@ export interface IProjectTaskItemProps extends DetailedHTMLProps<LiHTMLAttribute
     contributors: string[]
     status: ProjectTaskStatus,
 }
+export enum ProjectTypeEnum {
+    INPROGRESS = 'INPROGRESS',
+    ASSIGNED = 'ASSIGNED',
+    PENDING = 'PENDING',
+    INREVIEW = 'INREVIEW',
+    BLOCKED = 'BLOCKED',
+    COMPLETED = 'COMPLETED',
+    REJECTED = 'REJECTED',
+    CANCELLED = 'CANCELLED',
+    SCHEDULED = 'SCHEDULED',
+    DEFERRED = 'DEFERRED',
+}
 
-
+export interface IProject {
+    id?: string;
+    startDate: Date;
+    endDate: Date;
+    type: ProjectTypeEnum;
+    title: string;
+    description: string;
+    contributors?: [];
+    boards?: IBoard[];
+}
 export enum ProjectDocsItemType {
     EXCEL = 'excel',
     PDF = 'pdf',

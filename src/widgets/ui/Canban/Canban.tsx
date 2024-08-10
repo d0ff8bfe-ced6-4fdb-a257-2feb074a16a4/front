@@ -4,6 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { Board, Editable } from '@widgets/ui';
 import { IBoard, ICard } from '@widgets/ui/Canban/lib';
 import cls from './Canban.module.scss';
+import { selectedProject, useCreateBoardMutation } from '@entities/project';
+import { useAppSelector } from '@shared/lib';
 
 export const Canban = () => {
     const [data, setData] = useState<IBoard[]>(
@@ -13,8 +15,8 @@ export const Canban = () => {
             ? JSON.parse(localStorage.getItem('kanban-board'))
             : [],
     );
-
-
+    const [trigger, { data: info }] = useCreateBoardMutation();
+    const project = useAppSelector(selectedProject);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const dragCardInBoard = (source, destination) => {
@@ -37,6 +39,10 @@ export const Canban = () => {
 
     const addBoard = (title: string) => {
         const tempData = [...data];
+        trigger({
+            name: title,
+            projectId: project,
+        });
         tempData.push({
             id: uuidv4(),
             name: title,
@@ -109,30 +115,34 @@ export const Canban = () => {
         localStorage.setItem('kanban-board', JSON.stringify(data));
     }, [data]);
 
-    return (
-        <DragDropContext onDragEnd={onDragEnd}>
-            <div className={cls.boards}>
-                {data && data.map((item: IBoard) => (
-                    <Board
-                        key={item.name}
-                        name={item.name}
-                        setName={setName}
-                        addCard={addCard}
-                        id={item.id}
-                        removeCard={removeCard}
-                        removeBoard={removeBoard}
-                        updateCard={updateCard}
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-expect-error
-                        card={item.card || []}
-                    />
-                ))}
-                <div className={cls.add}>
-                    <Editable
-                        transfer={true} onSubmit={addBoard} />
+    if (project) {
+        return (
+            <DragDropContext onDragEnd={onDragEnd}>
+                <div className={cls.boards}>
+                    {data && data.map((item: IBoard) => (
+                        <Board
+                            key={item.name}
+                            name={item.name}
+                            setName={setName}
+                            addCard={addCard}
+                            id={item.id}
+                            removeCard={removeCard}
+                            removeBoard={removeBoard}
+                            updateCard={updateCard}
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-expect-error
+                            card={item.card || []}
+                        />
+                    ))}
+                    <div className={cls.add}>
+                        <Editable
+                            transfer={true} onSubmit={addBoard} />
+                    </div>
                 </div>
-            </div>
-        </DragDropContext>
-    );
+            </DragDropContext>
+        );
+    } else {
+        return null;
+    }
 };
 

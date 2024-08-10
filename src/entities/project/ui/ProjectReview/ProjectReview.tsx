@@ -1,131 +1,153 @@
 import cls from './ProjectReview.module.scss';
 import { Tag } from '@shared/ui/Tag';
-import { BorderEnum, ColorEnum, SizeEnum, WeightEnum } from '@shared/lib';
+import { BorderEnum, ColorEnum, SizeEnum, useAppSelector, WeightEnum } from '@shared/lib';
 import { Text } from '@shared/ui';
+import { ProjectTypeEnum, selectedProject, useLazyFindOneProjectQuery } from '@entities/project';
+import { useEffect } from 'react';
 
 export const ProjectReview = () => {
-    const projectWidgetData = {
-        project: {
-            title: 'Command project - Project documentation',
-            description: `Проект "Управление проектной документацией" направлен на создание системы эффективного управления всей документацией, связанной с строительными проектами компании. Целью проекта является упрощение процессов создания, утверждения, обновления, хранения и использования проектных документов, что способствует повышению операционной эффективности и снижению рисков в проектной деятельности.`,
-            status: {
-                daysRemaining: 43,
-                progress: 57,
-                progressLabel: 'в работе',
-                dateRange: '01.08 - 21.09',
-            },
-            participants: [
-                {
-                    name: 'Участник 1',
-                    avatarUrl: 'url_to_avatar1',
-                },
-                {
-                    name: 'Участник 2',
-                    avatarUrl: 'url_to_avatar2',
-                },
-                {
-                    name: 'Участник 3',
-                    avatarUrl: 'url_to_avatar3',
-                },
-            ],
-            icons: {
-                projectIcon: 'CP',
-                calendarIcon: 'url_to_calendar_icon',
-            },
-        },
+    const project = useAppSelector(selectedProject);
+    const [trigger, { data }] = useLazyFindOneProjectQuery();
+    useEffect(() => {
+        if (project) {
+            trigger(project);
+        }
+    }, [project]);
+    const projectTypeTranslations: Record<ProjectTypeEnum, string> = {
+        [ProjectTypeEnum.INPROGRESS]: 'В процессе',
+        [ProjectTypeEnum.ASSIGNED]: 'Назначен',
+        [ProjectTypeEnum.PENDING]: 'Ожидание',
+        [ProjectTypeEnum.INREVIEW]: 'На проверке',
+        [ProjectTypeEnum.BLOCKED]: 'Заблокирован',
+        [ProjectTypeEnum.COMPLETED]: 'Завершен',
+        [ProjectTypeEnum.REJECTED]: 'Отклонен',
+        [ProjectTypeEnum.CANCELLED]: 'Отменен',
+        [ProjectTypeEnum.SCHEDULED]: 'Запланирован',
+        [ProjectTypeEnum.DEFERRED]: 'Отложен',
     };
 
+    /**
+     * Преобразует строку в формат YYYY-MM-DD HH:mm:ss в объект Date.
+     *
+     * @param dateString - Строка даты
+     * @returns Объект Date
+     */
+    function parseDateString(dateString: string): Date {
+        // Преобразуем строку в объект Date, добавляя временную зону UTC
+        return new Date(dateString + 'Z');
+    }
 
-    return (
-        <div className={cls.wrapper}>
-            <div className={cls.heading}>
-                <Tag
-                    size={SizeEnum.H3}
-                    bgColor={ColorEnum.SECONDARY}
-                    border={BorderEnum.H2}
-                    color={ColorEnum.WHITE}
+    /**
+     * Вычисляет разницу в днях между двумя датами.
+     *
+     * @param startDateStr - Начальная дата в формате YYYY-MM-DD HH:mm:ss
+     * @param endDateStr - Конечная дата в формате YYYY-MM-DD HH:mm:ss
+     * @returns Разница в днях между двумя датами
+     */
+    function calculateDateDifference(startDateStr: string, endDateStr: string): number {
+        const startDate = new Date(startDateStr);
+        const endDate = new Date(endDateStr);
 
-                >
-                    {projectWidgetData.project.status.dateRange}
-                </Tag>
-                <Tag
-                    size={SizeEnum.H3}
-                    bgColor={ColorEnum.PRIMARY}
-                    border={BorderEnum.H2}
-                    color={ColorEnum.WHITE}
+        // Убедимся, что startDate не позднее endDate
+        if (startDate > endDate) {
+            throw new Error('Начальная дата не может быть позднее конечной даты');
+        }
 
-                >
-                    {projectWidgetData.project.status.progressLabel}
-                </Tag>
-            </div>
-            <div className={cls.body}>
-                <div className={cls.title}>
-                    <Text.Heading
-                        size={SizeEnum.H5}
-                        weight={WeightEnum.MEDIUM}
-                        color={ColorEnum.TEXT}
+        // Получаем разницу в миллисекундах
+        const timeDifference = endDate.getTime() - startDate.getTime();
+
+        // Преобразуем миллисекунды в дни
+        const dayDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+        return dayDifference;
+    }
+
+    function formatDays(days: number): string {
+        if (days === 1) {
+            return `${days} день`;
+        } else if (days > 1 && days < 5) {
+            return `${days} дня`;
+        } else {
+            return `${days} дней`;
+        }
+    }
+
+    if (data) {
+        return (
+            <div className={cls.wrapper}>
+                <div className={cls.heading}>
+                    <Tag
+                        size={SizeEnum.H3}
+                        bgColor={ColorEnum.SECONDARY}
+                        border={BorderEnum.H2}
+                        color={ColorEnum.WHITE}
+
                     >
-                        {projectWidgetData.project.title}
-                    </Text.Heading>
-                    <div className={cls.status}>
-                        <div className={cls.statusTitle}>
+                        {projectTypeTranslations[data.type]}
+                    </Tag>
+                    <Tag
+                        size={SizeEnum.H3}
+                        bgColor={ColorEnum.PRIMARY}
+                        border={BorderEnum.H2}
+                        color={ColorEnum.WHITE}
+
+                    >
+                        {formatDays(calculateDateDifference(data.startDate.toString(), data.endDate.toString()))}
+                    </Tag>
+                </div>
+                <div className={cls.body}>
+                    <div className={cls.title}>
+                        <Text.Heading
+                            size={SizeEnum.H5}
+                            weight={WeightEnum.MEDIUM}
+                            color={ColorEnum.TEXT}
+                        >
+                            {data.title}
+                        </Text.Heading>
+                        <Text.Paragraph
+                            size={SizeEnum.H3}
+                            weight={WeightEnum.MEDIUM}
+                            color={ColorEnum.TEXT}
+                        >
+                            Осталось {formatDays(calculateDateDifference(new Date().toString(), data.endDate.toString()))}
+                        </Text.Paragraph>
+                    </div>
+                    <div className={cls.content}>
+                        <div className={cls.description}>
                             <Text.Paragraph
-                                size={SizeEnum.H3}
+                                size={SizeEnum.H1}
                                 weight={WeightEnum.MEDIUM}
                                 color={ColorEnum.TEXT}
                             >
-                                Осталось&nbsp;
-                                {projectWidgetData.project.status.daysRemaining}&nbsp;дня
+                                Описание
                             </Text.Paragraph>
                             <Text.Paragraph
                                 size={SizeEnum.H2}
-                                weight={WeightEnum.BOLD}
                                 color={ColorEnum.TEXT}
                             >
-                                {projectWidgetData.project.status.progress}%
+                                {data.description}
                             </Text.Paragraph>
                         </div>
-                        <div
-                            style={{ width: 300 }}
-                            className={cls.statusBar}>
-              <span style={{ width: `${projectWidgetData.project.status.progress * 3}px` }}>
-              </span>
+                        <div className={cls.members}>
+                            <Text.Paragraph
+                                size={SizeEnum.H1}
+                                weight={WeightEnum.MEDIUM}
+                                color={ColorEnum.TEXT}
+                            >
+                                Участники
+                            </Text.Paragraph>
+                            <ul className={cls.list}>
+                                {[3, 4, 2].map((item) => (
+                                    <li key={item} className={cls.member}></li>
+                                ))}
+                            </ul>
                         </div>
-                    </div>
-                </div>
-                <div className={cls.content}>
-                    <div className={cls.description}>
-                        <Text.Paragraph
-                            size={SizeEnum.H1}
-                            weight={WeightEnum.MEDIUM}
-                            color={ColorEnum.TEXT}
-                        >
-                            Описание
-                        </Text.Paragraph>
-                        <Text.Paragraph
-                            size={SizeEnum.H2}
-                            color={ColorEnum.TEXT}
-                        >
-                            {projectWidgetData.project.description}
-                        </Text.Paragraph>
-                    </div>
-                    <div className={cls.members}>
-                        <Text.Paragraph
-                            size={SizeEnum.H1}
-                            weight={WeightEnum.MEDIUM}
-                            color={ColorEnum.TEXT}
-                        >
-                            Участники
-                        </Text.Paragraph>
-                        <ul className={cls.list}>
-                            {projectWidgetData.project.participants.map((item) => (
-                                <li key={item.name} className={cls.member}></li>
-                            ))}
-                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    } else {
+        return null;
+    }
 };
 

@@ -5,6 +5,11 @@
   justify-content: center;
   align-items: center;
 
+  & svg {
+    width: 20px;
+    height: 20px;
+  }
+
   &:disabled {
     cursor: not-allowed;
     filter: brightness(90%);

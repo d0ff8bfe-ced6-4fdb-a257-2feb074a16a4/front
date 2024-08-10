@@ -1,7 +1,8 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
-import { CalendarPage, DocumentsPage, LoginPage, MainPage, MainPageProvider, RegisterPage } from '@pages/ui';
+import { CalendarPage, DocumentsPage, LoginPage, MainPageProvider, RegisterPage } from '@pages/ui';
 import { Provider } from '@widgets/lib';
 import { ProjectCanban, ProjectDocs, ProjectGant, ProjectReview } from '@entities/project';
+import { AuthProvider } from './AuthProvider.tsx';
 
 export const router = createBrowserRouter([
     {
@@ -10,6 +11,7 @@ export const router = createBrowserRouter([
     },
     {
         path: '/home',
+        element: <AuthProvider />,
         children: [
             {
                 index: true,

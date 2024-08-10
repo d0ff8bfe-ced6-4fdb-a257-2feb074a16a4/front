@@ -81,12 +81,6 @@
       "@entities/*": [
         "src/entities/*"
       ],
-      "@store": [
-        "src/shared/lib/store/*"
-      ],
-      "@store/*": [
-        "src/shared/lib/store/*"
-      ]
     },
     "allowSyntheticDefaultImports": true
   },
