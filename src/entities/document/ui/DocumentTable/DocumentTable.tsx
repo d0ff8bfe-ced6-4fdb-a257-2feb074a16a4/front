@@ -1,4 +1,4 @@
-import { SetStateAction, useMemo } from 'react';
+import { useMemo } from 'react';
 import { MantineProvider } from '@mantine/core';
 import { MRT_ColumnDef, useMantineReactTable, MRT_Table } from 'mantine-react-table';
 import { useTheme } from '@app/providers';
@@ -117,6 +117,7 @@ export const DocumentTable = ({ activeTab }: DocumentTable) => {
                 'table': {
                     borderRadius: '20px',
                     fontSize: 24,
+                    backgroundColor: 'var(--bg) !important',
                 },
             },
         },
@@ -126,7 +127,9 @@ export const DocumentTable = ({ activeTab }: DocumentTable) => {
                 cursor: 'pointer',
                 fontWeight: 'var(--fontBold) !important',
                 fontSize: 'var(--paragraph-size-2) !important',
-                backgroundColor: 'white', // Set background color to white
+                color: 'var(--text) !important',
+                backgroundColor: 'var(--bg)',
+
             },
         },
         mantineTableBodyCellProps: {
@@ -134,7 +137,9 @@ export const DocumentTable = ({ activeTab }: DocumentTable) => {
                 padding: '30px 20px  !important',
                 cursor: 'pointer',
                 font: 'var(--paragraph-3) !important',
-                backgroundColor: 'white', // Set background color to white
+                color: 'var(--text) !important',
+                backgroundColor: 'var(--bg)',
+
             },
         },
     });

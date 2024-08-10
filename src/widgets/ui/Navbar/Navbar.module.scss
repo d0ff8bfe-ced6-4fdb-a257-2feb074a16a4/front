@@ -4,4 +4,13 @@
   padding: 20px 30px;
   border-radius: var(--border-radius-2);
   background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  & svg {
+    fill: var(--primary);
+    width: 25px;
+    height: 25px;
+  }
 }

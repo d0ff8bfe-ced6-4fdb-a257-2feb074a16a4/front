@@ -74,7 +74,7 @@ export const Editable = (
             setShow(true);
           }}
         >
-          {placeholder ? placeholder : 'Добавить доску'}
+          {placeholder && placeholder}
           <Plus />
         </Text.Paragraph>
       )}
