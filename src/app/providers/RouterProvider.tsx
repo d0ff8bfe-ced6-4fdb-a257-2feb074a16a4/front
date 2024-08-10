@@ -6,7 +6,7 @@ import { ProjectCanban, ProjectDocs, ProjectGant, ProjectReview } from '@entitie
 export const router = createBrowserRouter([
     {
         index: true,
-        loader: async () => redirect('/home/reivew'),
+        loader: async () => redirect('/home/review'),
     },
     {
         path: '/home',

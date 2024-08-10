@@ -1,7 +1,7 @@
 .wrapper {
   border-radius: var(--border-radius-2);
   transition: 0.3s all ease;
-  flex: 0 1 250px;
+  flex: 0 1 300px;
   display: flex;
   background-color: var(--bg);
   flex-direction: column;
@@ -10,8 +10,8 @@
   padding: 20px;
   box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
   max-height: 600px;
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 300px;
+  max-width: 300px;
   &.hide {
     padding: 20px 5px;
     flex: 0 1 75px;

@@ -10,6 +10,7 @@
     position: relative;
     gap: 20px;
     cursor: pointer;
+
     &:hover {
       background-color: var(--bg-dark);
     }
@@ -36,5 +37,7 @@
   font-weight: 900;
   color: var(--primary) !important;
 
-
+  & svg {
+    fill: var(--primary);
+  }
 }
