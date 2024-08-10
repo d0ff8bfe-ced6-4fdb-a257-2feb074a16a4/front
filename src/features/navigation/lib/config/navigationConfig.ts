@@ -5,6 +5,6 @@ import Calendar from '@assets/icons/calendar.svg';
 
 export const NavigationConfig: INavigation[] = [
     { path: '/home', label: 'Главная', icon: Home },
-    { path: '/docs', label: 'Документы', icon: Docs },
+    { path: '/documents', label: 'Документы', icon: Docs },
     { path: '/calendar', label: 'Календарь', icon: Calendar },
 ];
