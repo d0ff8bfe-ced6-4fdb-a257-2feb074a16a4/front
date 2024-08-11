@@ -12,7 +12,7 @@ export const Navbar = () => {
                 color={ColorEnum.PRIMARY}
                 weight={WeightEnum.BOLD}
             >
-                АрхиКот
+                Техград
             </Text.Heading>
         </nav>
     );

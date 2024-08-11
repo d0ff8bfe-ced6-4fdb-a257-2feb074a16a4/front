@@ -1,5 +1,13 @@
 import { createBrowserRouter, redirect } from 'react-router-dom';
-import { CalendarPage, DocumentsPage, LoginPage, MainPageProvider, RegisterPage } from '@pages/ui';
+import {
+    AccessPage,
+    AnalyticPage,
+    CalendarPage,
+    DocumentsPage,
+    LoginPage,
+    MainPageProvider,
+    RegisterPage,
+} from '@pages/ui';
 import { Provider } from '@widgets/lib';
 import { ProjectCanban, ProjectDocs, ProjectGant, ProjectReview } from '@entities/project';
 import { AuthProvider } from './AuthProvider.tsx';
@@ -42,6 +50,14 @@ export const router = createBrowserRouter([
     {
         path: '/documents',
         element: <Provider><DocumentsPage /></Provider>,
+    },
+    {
+        path: '/analytics',
+        element: <Provider><AnalyticPage /></Provider>,
+    },
+    {
+        path: '/access',
+        element: <Provider><AccessPage /></Provider>,
     },
     {
         path: '/auth',

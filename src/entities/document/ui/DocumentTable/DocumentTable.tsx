@@ -86,6 +86,8 @@ export const DocumentTable = ({ activeTab }: DocumentTable) => {
             {
                 accessorKey: 'created_at',
                 header: 'Дата создания',
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
                 Cell: ({ cell }) => new Date(cell.getValue()).toLocaleDateString(), // Format date
             },
             {
@@ -122,6 +124,8 @@ export const DocumentTable = ({ activeTab }: DocumentTable) => {
             },
         },
         mantineTableHeadCellProps: {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             sx: {
                 padding: '30px 20px  !important',
                 cursor: 'pointer',
@@ -152,6 +156,8 @@ export const DocumentTable = ({ activeTab }: DocumentTable) => {
         >
             <div className={cls.wrapper}>
                 <MRT_Table
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-expect-error
                     mantinePaperProps={{
                         sx: {
                             borderRadius: '20px', // Apply border-radius to the entire table

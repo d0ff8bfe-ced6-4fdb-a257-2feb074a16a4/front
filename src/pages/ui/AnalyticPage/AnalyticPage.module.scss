@@ -1,0 +1,36 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(40vw, 1fr));
+  grid-gap: 20px;
+
+  & .project {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: var(--border-radius-2);
+    background-color: var(--bg);
+  }
+
+  & .risk {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: var(--border-radius-2);
+    background-color: var(--bg);
+
+
+    & .text {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      & span {
+        font-weight: var(--fontBold);
+        color: var(--secondary);
+      }
+
+    }
+  }
+}
